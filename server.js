@@ -69,18 +69,12 @@ app.post('/api/complete-task', (req, res) => {
 app.post('/api/get-download-link', (req, res) => {
     const { userId, fileId, price } = req.body;
 
-    if (!userDatabase[userId] || userDatabase[userId].points < price) {
-        return res.status(400).json({ error: "Bạn không đủ điểm! Hãy làm thêm nhiệm vụ phía dưới để kiếm điểm." });
-    }
-
+   
     // Kiểm tra xem fileId có tồn tại trong kho lưu trữ bí mật không
     const realDownloadUrl = SECRET_FILE_STORE[fileId];
-    if (!realDownloadUrl) {
-        return res.status(404).json({ error: "File này không tồn tại hoặc đã bị xóa." });
-    }
+   
 
-    // Trừ điểm của User
-    userDatabase[userId].points -= price;
+    
 
     // Trả link thật về cho Frontend tự động mở ra cho User tải
     res.json({ 
