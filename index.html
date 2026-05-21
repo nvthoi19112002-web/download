@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premium Downloader & Task Wall</title>
-    <!-- Nhúng Telegram Web App SDK chính thức -->
+    <!-- Embedded official Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
@@ -36,69 +36,69 @@
         <h2>🚀 Premium Hub App</h2>
     </div>
 
-    <!-- Khu vực hiển thị thông tin User -->
+    <!-- User Information Panel -->
     <div class="user-card">
-        <div>Xin chào: <span id="username" style="font-weight:bold;">Đang tải...</span></div>
-        <div>Ví của bạn: <span id="points" class="balance">0</span> Point</div>
+        <div>Welcome: <span id="username" style="font-weight:bold;">Loading...</span></div>
+        <div>Your Balance: <span id="points" class="balance">0</span> Points</div>
     </div>
 
-    <!-- Ý TƯỞNG A: KHU VỰC TẢI FILE / GET LINK -->
-    <div class="section-title">📂 Kho File Premium (Cần Điểm)</div>
+    <!-- IDEA A: PREMIUM FILE DOWNLOADS -->
+    <div class="section-title">📂 Premium File Hub (Points Required)</div>
     <ul class="item-list">
         <li class="item-box">
             <div>
-                <strong>[Hack] Liên Quân Mobile V1.5</strong><br>
-                <small style="color:var(--tg-theme-hint-color)">Giá: 50 Points</small>
+                <strong>[Hack] Arena of Valor V1.5</strong><br>
+                <small style="color:var(--tg-theme-hint-color)">Price: 50 Points</small>
             </div>
-            <button class="btn" onclick="downloadFile('file_lq_01', 50)">Tải Ngay</button>
+            <button class="btn" onclick="downloadFile('file_lq_01', 50)">Download</button>
         </li>
         <li class="item-box">
             <div>
-                <strong>Khóa Học IELTS 8.0 Full</strong><br>
-                <small style="color:var(--tg-theme-hint-color)">Giá: 100 Points</small>
+                <strong>Complete IELTS 8.0 Course</strong><br>
+                <small style="color:var(--tg-theme-hint-color)">Price: 100 Points</small>
             </div>
-            <button class="btn" onclick="downloadFile('file_ielts_02', 100)">Tải Ngay</button>
+            <button class="btn" onclick="downloadFile('file_ielts_02', 100)">Download</button>
         </li>
     </ul>
 
-    <!-- Ý TƯỞNG B: KHU VỰC NHIỆM VỤ KIẾM ĐIỂM -->
-    <div class="section-title">💰 Nhiệm Vụ Kiếm Điểm (Task Wall)</div>
+    <!-- IDEA B: TASK WALL FOR EARNING POINTS -->
+    <div class="section-title">💰 Earn Points (Task Wall)</div>
     <ul class="item-list">
         <li class="item-box">
             <div>
-                <strong>Nhiệm vụ 1: Xem Video Hot</strong><br>
+                <strong>Task 1: Watch Trending Video</strong><br>
                 <small style="color: #2ecc71;">+30 Points</small>
             </div>
-            <button class="btn" onclick="doTask('task_ad_01', 'https://smartlink-monetag-1.com')">Làm</button>
+            <button class="btn" onclick="doTask('task_ad_01', 'https://omg10.com/4/11036217')">Start</button>
         </li>
         <li class="item-box">
             <div>
-                <strong>Nhiệm vụ 2: Click Liên Kết Tài Trợ</strong><br>
+                <strong>Task 2: Click Sponsored Link</strong><br>
                 <small style="color: #2ecc71;">+20 Points</small>
             </div>
-            <button class="btn" onclick="doTask('task_ad_02', 'https://smartlink-monetag-2.com')">Làm</button>
+            <button class="btn" onclick="doTask('task_ad_02', 'https://omg10.com/4/11036281')">Start</button>
         </li>
     </ul>
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Mở rộng ứng dụng tràn màn hình Telegram
+        tg.expand(); // Expand app to full height inside Telegram
 
-        // Cấu hình URL Backend của bạn sau khi deploy (Ví dụ: Render, Vercel hoặc ngrok)
-        const BACKEND_URL = "https://download-pn2i.onrender.com"; 
+        // Configure your live Render backend URL here
+        const BACKEND_URL = "https://your-backend-domain.com"; 
         
         let userTelegramId = 0;
 
-        // Khởi tạo và đồng bộ User với Backend
+        // Initialize and sync User with Backend
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
             userTelegramId = user.id;
             document.getElementById("username").innerText = user.username || user.first_name;
             
-            // Gọi Backend lấy số điểm hiện tại của user
+            // Fetch the user's current points from the Backend
             updateUserPoints();
         } else {
-            document.getElementById("username").innerText = "Chạy ngoài Telegram";
+            document.getElementById("username").innerText = "Running Outside Telegram";
         }
 
         async function updateUserPoints() {
@@ -106,15 +106,15 @@
                 let response = await fetch(`${BACKEND_URL}/api/user/${userTelegramId}`);
                 let data = await response.json();
                 document.getElementById("points").innerText = data.points;
-            } catch (err) { console.error("Lỗi lấy điểm:", err); }
+            } catch (err) { console.error("Error loading points:", err); }
         }
 
-        // Xử lý Ý tưởng B: Làm nhiệm vụ kiếm tiền
+        // Handle Idea B: Task completion
         function doTask(taskId, smartLink) {
-            // 1. Mở Smartlink quảng cáo của Monetag ra trình duyệt ngoài
+            // 1. Open the Monetag Smartlink in the user's external browser
             tg.openLink(smartLink);
 
-            // 2. Gửi tín hiệu về backend để báo đã click và cộng điểm
+            // 2. Notify the backend to verify the click and credit points
             setTimeout(async () => {
                 try {
                     let res = await fetch(`${BACKEND_URL}/api/complete-task`, {
@@ -125,11 +125,11 @@
                     let data = await res.json();
                     alert(data.message);
                     updateUserPoints();
-                } catch (e) { alert("Có lỗi xảy ra khi cộng điểm!"); }
-            }, 3000); // Đợi 3 giây để kích hoạt flow
+                } catch (e) { alert("An error occurred while claiming your points!"); }
+            }, 3000); // 3-second delay to allow the external flow trigger
         }
 
-        // Xử lý Ý tưởng A: Đổi điểm lấy link tải file thật
+        // Handle Idea A: Spend points for the actual download link
         async function downloadFile(fileId, price) {
             try {
                 let res = await fetch(`${BACKEND_URL}/api/get-download-link`, {
@@ -140,13 +140,13 @@
                 let data = await res.json();
                 
                 if (res.status === 200) {
-                    // Nếu đủ điểm, backend trả về link Drive thật và ép mở link tải luôn
+                    // If points are sufficient, backend provides the real Drive link and pushes it to open
                     tg.openLink(data.downloadUrl);
                     updateUserPoints();
                 } else {
-                    alert(data.error); // Cảnh báo nếu không đủ điểm
+                    alert(data.error); // Warn user if points are insufficient
                 }
-            } catch (e) { alert("Lỗi xử lý hệ thống tải file!"); }
+            } catch (e) { alert("Error processing file download system!"); }
         }
     </script>
 </body>
