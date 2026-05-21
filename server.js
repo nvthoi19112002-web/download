@@ -1,21 +1,36 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
+
+// Middleware cấu hình CORS và ép kiểu dữ liệu JSON
 app.use(cors());
 app.use(bodyParser.json());
 
-// Giả lập Database lưu trữ trong RAM bộ nhớ tạm (Tắt app sẽ reset, sau này bạn kết nối MongoDB/PostgreSQL sau)
+// 1. PHÂN PHỐI GIAO DIỆN STATIC (Giải quyết triệt để lỗi Cannot GET /)
+// Định nghĩa thư mục chứa các file tĩnh (CSS, JS, hình ảnh nếu có)
+app.use(express.static(__dirname));
+
+// Khi người dùng truy cập trang chủ, trả về file index.html nằm cùng cấp với server.js
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// ==========================================
+// 2. LOGIC BACKEND (DATA & API XỬ LÝ ĐIỂM)
+
+// Giả lập Database lưu trữ trong RAM bộ nhớ tạm
 let userDatabase = {}; 
 
-// Giả lập kho dữ liệu link thật lưu an toàn ở Backend (User không biết được link này nếu chưa đổi điểm)
+// Kho dữ liệu link thật lưu an toàn ở Backend (Ẩn link Drive gốc)
 const SECRET_FILE_STORE = {
-    "file_lq_01": "https://drive.google.com/file/d/LINK_DRIVE_HACK_LIEN_QUAN_THAT/view",
-    "file_ielts_02": "https://drive.google.com/file/d/LINK_DRIVE_TAI_LIEU_IELTS_THAT/view"
+    "file_lq_01": "https://omg10.com/4/11036217",
+    "file_ielts_02": "https://omg10.com/4/11036281"
 };
 
-// Cấu hình điểm thưởng cho từng Task tương ứng frontend
+// Cấu hình điểm thưởng cho từng Task tương ứng với frontend
 const TASK_REWARDS = {
     "task_ad_01": 30,
     "task_ad_02": 20
@@ -75,8 +90,10 @@ app.post('/api/get-download-link', (req, res) => {
     });
 });
 
-// Chạy server ở cổng 3000
-const PORT = 3000;
+// ==========================================
+// 3. KHỞI CHẠY SERVER ĐỒNG BỘ CỔNG VỚI RENDER
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Backend Server đang chạy mượt mà tại cổng http://localhost:${PORT}`);
+    console.log(`[OK] Server đang chạy ổn định tại cổng: ${PORT}`);
 });
